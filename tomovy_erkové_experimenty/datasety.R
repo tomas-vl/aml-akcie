@@ -1,7 +1,7 @@
 library(here)
 library(dplyr)
 
-orcl_all <- read.csv(here("../data/ORCL_all_orig.csv")) %>% # načte soubor
+orcl_all <- read.csv(here("../data/ORCL_all_orig.csv")) %>%
   rename(date = Date,           # přejmenuje sloupce
          open = Open, 
          high = High, 
@@ -10,11 +10,11 @@ orcl_all <- read.csv(here("../data/ORCL_all_orig.csv")) %>% # načte soubor
          adjusted_close = Adj.Close, 
          volume = Volume
          ) %>% 
+  mutate(date = as.Date(date, format = "%Y-%m-%d")) %>% # převede sloupec "date" ze stringu na datum
   mutate(id = row_number()) %>% # přidá sloupec s ID
-  select(id, everything()) %>%  # přesune sloupec s ID na začátek
-  mutate(date = as.Date(date, format = "%Y-%m-%d"))
+  select(id, everything())      # přesune sloupec s ID na začátek
 
-# trénovací a testovací data v poměru 3 : 1
+# tvorba trénovacích a testovacích dat
 orcl_train <- subset(orcl_all, date < "2017-01-03")
 orcl_test <- subset(orcl_all, date >= "2017-01-03")
 
