@@ -10,13 +10,13 @@ import numpy as np
 alldata_df = pd.read_csv('ORCL_all.csv')
 
 
-# Create 5-day % changes of Adj_Close for the current day, and 5 days in the future
-alldata_df['5d_future_close'] = alldata_df['adjusted_close'].shift(-5)
-alldata_df['5d_close_future_pct'] = alldata_df['5d_future_close'].pct_change(5, fill_method=None)
-alldata_df['5d_close_pct'] = alldata_df['adjusted_close'].pct_change(5, fill_method=None)
+# Create 1-day % changes of Adj_Close for the current day, and 5 days in the future
+alldata_df['1d_future_close'] = alldata_df['adjusted_close'].shift(-1)
+alldata_df['1d_close_future_pct'] = alldata_df['1d_future_close'].pct_change(1, fill_method=None)
+alldata_df['1d_close_pct'] = alldata_df['adjusted_close'].pct_change(1, fill_method=None)
 
 
-feature_names = ['5d_close_pct']  # a list of the feature names for later
+feature_names = ['1d_close_pct']  # a list of the feature names for later
 
 # Create moving averages and rsi for timeperiods of 14, 30, 50, and 200
 for n in [14, 30, 50, 200]:
@@ -36,10 +36,10 @@ alldata_df = alldata_df.dropna()
 # Create features and targets
 # use feature_names for features; '5d_close_future_pct' for targets
 features = alldata_df[feature_names]
-targets = alldata_df['5d_close_future_pct']
+targets = alldata_df['1d_close_future_pct']
 
 # Create DataFrame from target column and feature columns
-feature_and_target_cols = ['5d_close_future_pct'] + feature_names
+feature_and_target_cols = ['1d_close_future_pct'] + feature_names
 feat_targ_df = alldata_df[feature_and_target_cols]
 
 # Calculate correlation matrix
